@@ -32,6 +32,8 @@ def get_one_planet(planet_id):
     for planet in planet_list:
         if planet.id==planet_id:
             chosen_planet = planet
+    if chosen_planet is None:
+        return jsonify({"msg": f"Could not find a planet with id: {planet_id}"})
 
     return_planet = {
         "id": chosen_planet.id, 
