@@ -24,3 +24,20 @@ def get_all_planets():
                         "description":planet.description, "radius":planet.radius}
         result.append(planet_dict)
     return jsonify(result), 200
+
+@planet_bp.route('/<planet_id>', methods=['GET'])
+def get_one_planet(planet_id):
+    chosen_planet = None
+    planet_id = int(planet_id)
+    for planet in planet_list:
+        if planet.id==planet_id:
+            chosen_planet = planet
+
+    return_planet = {
+        "id": chosen_planet.id, 
+        "name": chosen_planet.name, 
+        "description": chosen_planet.description,
+        "radius": chosen_planet.radius
+    }
+    return jsonify(return_planet), 200
+        
