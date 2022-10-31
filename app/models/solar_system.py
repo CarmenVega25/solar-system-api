@@ -5,3 +5,9 @@ class Planet(db.Model):
     name = db.Column(db.String)
     description = db.Column(db.String)
     radius = db.Column(db.Float)
+
+    def to_dict(self):
+        return {"id":self.id, 
+                "name":self.name,
+                "description":self.description,
+                "radius":self.radius}
