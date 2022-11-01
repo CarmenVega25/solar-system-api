@@ -48,9 +48,15 @@ def create_one_planet():
 
 @planet_bp.route('',methods=['GET'])
 def get_all_planets():
+    name_query_value = request.args.get('name')
+    
+    if name_query_value is not None:
+        planets = Planet.query.filter_by(name=name_query_value)
+    else:
+        planets = Planet.query.all()
+    
     result = []
-    all_planets = Planet.query.all()
-    for planet in all_planets:
+    for planet in planets:
         # planet_dict = {"id":planet.id, "name":planet.name,
         #                 "description":planet.description, "radius":planet.radius}
         result.append(planet.to_dict())
