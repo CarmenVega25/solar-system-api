@@ -2,13 +2,6 @@ from flask import abort, Blueprint, jsonify, make_response, request
 from app import db
 from app.models.solar_system import Planet
 
-# class Planet:
-#     def __init__(self, id, name, descripiton, radius):
-#         self.id = id
-#         self.name = name
-#         self.description = descripiton
-#         self.radius = radius
-
 # planet_list = [
 #     Planet(1, "Mars", "Red planet",  2106.1),
 #     Planet(2, "Saturn", "Planet with rings", 36184),
@@ -17,15 +10,6 @@ from app.models.solar_system import Planet
 # ]
 
 planet_bp = Blueprint("planet_bp",__name__, url_prefix="/planet")
-
-# @planet_bp.route('', methods=['GET'])
-# def get_all_planets():
-#     result = []
-#     for planet in planet_list:
-#         planet_dict = {"id":planet.id, "name":planet.name,
-#                         "description":planet.description, "radius":planet.radius}
-#         result.append(planet_dict)
-#     return jsonify(result), 200
 
 @planet_bp.route('/<planet_id>', methods=['GET'])
 def get_one_planet(planet_id):
@@ -57,8 +41,6 @@ def get_all_planets():
     
     result = []
     for planet in planets:
-        # planet_dict = {"id":planet.id, "name":planet.name,
-        #                 "description":planet.description, "radius":planet.radius}
         result.append(planet.to_dict())
     return jsonify(result), 200
 
@@ -72,7 +54,7 @@ def update_one_planet_id(planet_id):
         update_planet.description = request_body["description"]
         update_planet.radius = request_body["radius"]
     except KeyError:
-        return jsonify({"msg": f"Missing needed date"}), 400
+        return jsonify({"msg": f"Missing needed data"}), 400
     
     db.session.commit()
     return jsonify({"msg": f"Successfulyl updated planet with id {update_planet.id}"}), 200
