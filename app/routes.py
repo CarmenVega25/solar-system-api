@@ -13,7 +13,7 @@ planet_bp = Blueprint("planet_bp",__name__, url_prefix="/planet")
 
 @planet_bp.route('/<planet_id>', methods=['GET'])
 def get_one_planet(planet_id):
-    chosen_planet = get_planet_from_id(planet_id)
+    chosen_planet = get_model_from_id(Planet, planet_id)
     return jsonify(chosen_planet.to_dict()), 200
         
 @planet_bp.route('', methods=["POST"])
@@ -48,7 +48,7 @@ def get_all_planets():
 
 @planet_bp.route('/<planet_id>', methods=['PUT'])
 def update_one_planet_id(planet_id):
-    update_planet = get_planet_from_id(planet_id)
+    update_planet = get_model_from_id(Planet, planet_id)
     request_body = request.get_json()
 
     try:
@@ -61,22 +61,22 @@ def update_one_planet_id(planet_id):
     db.session.commit()
     return jsonify({"msg": f"Successfulyl updated planet with id {update_planet.id}"}), 200
 
-def get_planet_from_id(planet_id):
+def get_model_from_id(cls, model_id):
     try:
-        planet_id = int(planet_id)
+        model_id = int(model_id)
     except ValueError:
-        return abort(make_response({"msg": f"Invalid data type {planet_id}"}, 400))
+        return abort(make_response({"msg": f"Invalid data type {model_id}"}, 400))
     
-    chosen_planet = Planet.query.get(planet_id)
+    chosen_object = cls.query.get(model_id)
 
-    if chosen_planet is None:
-        return abort(make_response({"msg": f"Could not find a planet with id: {planet_id}"}, 404))
+    if chosen_object is None:
+        return abort(make_response({"msg": f"Could not find a {cls.__name__} with id: {model_id}"}, 404))
     
-    return chosen_planet
+    return chosen_object
 
 @planet_bp.route('/<planet_id>', methods=['DELETE'])
 def delete_one_planet(planet_id):
-    planet_to_delete = get_planet_from_id(planet_id)
+    planet_to_delete = get_model_from_id(Planet, planet_id)
     db.session.delete(planet_to_delete)
     db.session.commit()
     return jsonify({"msg":f"Successfully deleted planet with id {planet_to_delete.id}"}), 200
