@@ -20,11 +20,13 @@ def get_one_planet(planet_id):
 def create_one_planet():
     request_body = request.get_json()
 
-    new_planet = Planet( 
-                        name=request_body['name'],
-                        description=request_body['description'],
-                        radius=request_body['radius']
-                        )
+    new_planet = Planet.from_dict(request_body)
+
+    # new_planet = Planet( 
+    #                     name=request_body['name'],
+    #                     description=request_body['description'],
+    #                     radius=request_body['radius']
+    #                     )
     db.session.add(new_planet)
     db.session.commit()
 
